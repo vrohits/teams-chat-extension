@@ -1,7 +1,5 @@
 databases:
   - name: teams-chat-postgres
-    databaseName: chatdb
-    user: postgres
     plan: free
 
 services:
