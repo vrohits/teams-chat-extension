@@ -216,8 +216,13 @@ public class ChatService {
     public User registerOrUpdateUser(String username, String displayName, String avatarColor) {
         return userRepository.findByUsernameIgnoreCase(username)
                 .map(existing -> {
-                    if (displayName != null && !displayName.isBlank()) existing.setDisplayName(displayName);
-                    if (avatarColor != null && !avatarColor.isBlank()) existing.setAvatarColor(avatarColor);
+                    // Preserve database displayName if already set in PostgreSQL
+                    if (existing.getDisplayName() == null || existing.getDisplayName().isBlank()) {
+                        if (displayName != null && !displayName.isBlank()) existing.setDisplayName(displayName);
+                    }
+                    if (avatarColor != null && !avatarColor.isBlank() && (existing.getAvatarColor() == null || existing.getAvatarColor().isBlank())) {
+                        existing.setAvatarColor(avatarColor);
+                    }
                     existing.setStatus("ONLINE");
                     existing.setLastSeen(LocalDateTime.now());
                     return userRepository.save(existing);

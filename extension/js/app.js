@@ -104,8 +104,14 @@
         const serverUrl = await ApiService.getServerUrl();
 
         try {
-            // Register current user on backend
-            await ApiService.registerUser(currentUser.username, currentUser.displayName, currentUser.avatarColor);
+            // Register current user on backend and sync any name changes from PostgreSQL!
+            const dbUser = await ApiService.registerUser(currentUser.username, currentUser.displayName, currentUser.avatarColor);
+            if (dbUser && dbUser.displayName && dbUser.displayName !== currentUser.displayName) {
+                currentUser.displayName = dbUser.displayName;
+                if (dbUser.avatarColor) currentUser.avatarColor = dbUser.avatarColor;
+                await ApiService.saveUserProfile(currentUser);
+                updateHeaderUserDisplay();
+            }
 
             // Fetch public channels and direct chats
             await refreshAllChannels();
