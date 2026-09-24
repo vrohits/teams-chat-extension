@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams Chat Board</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="brand-section">
+            <img src="icons/icon48.png" alt="Teams Logo" class="brand-logo">
+            <span class="brand-title">Teams Board</span>
+        </div>
+
+        <!-- Quick Switch User Pill -->
+        <div class="user-profile-menu-container">
+            <button id="userProfileBtn" class="user-profile-btn" title="Click to switch user in this window">
+                <div id="headerUserAvatar" class="mini-avatar" style="background: #6264A7;">U</div>
+                <span id="headerUserName" class="header-user-name">Loading...</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+            </button>
+            <div id="switchUserDropdown" class="switch-user-dropdown" style="display: none;">
+                <div class="switch-dropdown-header">Switch Account in this Window</div>
+                <div id="switchUserList" class="switch-user-list">
+                    <!-- Known users list -->
+                </div>
+                <div class="switch-dropdown-divider"></div>
+                <button id="addNewUserBtn" class="switch-add-btn">+ Log in as different user...</button>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <div id="statusBadge" class="status-badge" title="Connection status to chat server">
+                <span id="statusDot" class="status-dot"></span>
+                <span id="statusText">Connecting</span>
+            </div>
+            <button id="toggleSidebarBtn" class="icon-btn" title="Toggle Sidebar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+            </button>
+            <button id="openSettingsBtn" class="icon-btn" title="Server & Profile Settings">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside id="channelsSidebar" class="channels-sidebar">
+            <!-- Search & Start Chat -->
+            <div class="search-wrapper">
+                <div class="search-input-box">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="search-icon">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    <input type="text" id="userSearchInput" class="search-input" placeholder="Search people..." autocomplete="off">
+                    <button id="clearSearchBtn" class="clear-search-btn" style="display: none;">&times;</button>
+                </div>
+                <!-- Instant search results dropdown -->
+                <div id="searchResultsDropdown" class="search-results-dropdown" style="display: none;"></div>
+            </div>
+
+            <!-- Direct Messages (1-on-1) -->
+            <div class="sidebar-section-header">
+                <span>Direct Chats</span>
+                <button id="openNewDirectChatBtn" class="add-channel-btn" title="Search & chat with a teammate">🔍+</button>
+            </div>
+            <ul id="directChatList" class="channel-list">
+                <!-- Dynamically populated 1-on-1 chats -->
+            </ul>
+
+            <!-- Channels Section -->
+            <div class="sidebar-section-header">
+                <span>Channels</span>
+                <button id="addChannelBtn" class="add-channel-btn" title="Create public channel">+</button>
+            </div>
+            <ul id="channelList" class="channel-list">
+                <!-- Dynamically populated channels -->
+            </ul>
+
+            <!-- Online Team Directory -->
+            <div class="sidebar-section-header" style="margin-top: auto; border-top: 1px solid var(--border-color);">
+                <span>Team Members</span>
+            </div>
+            <ul id="onlineUsersList" class="channel-list" style="max-height: 110px;">
+                <!-- Dynamically populated online users -->
+            </ul>
+        </aside>
+
+        <!-- Chat View Area -->
+        <main class="chat-area">
+            <div class="chat-header">
+                <div id="chatHeaderContent" class="chat-channel-info">
+                    <!-- Populated dynamically: either channel or direct user -->
+                </div>
+            </div>
+
+            <!-- Incoming Notification Banner -->
+            <div id="notificationBanner" class="notification-banner" style="display: none;"></div>
+
+            <!-- Messages Stream -->
+            <div id="messagesContainer" class="messages-container">
+                <!-- Dynamically populated messages -->
+            </div>
+
+            <!-- Composer Input Bar -->
+            <div class="input-container">
+                <div class="input-box-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        class="message-textarea" 
+                        placeholder="Type a message (Enter to send, Shift+Enter for new line)..."
+                        rows="1"
+                    ></textarea>
+                    <div class="input-toolbar">
+                        <div class="quick-tools">
+                            <button id="emojiBtn" class="tool-btn" title="Insert Emoji">😊</button>
+                            <button id="codeSnippetBtn" class="tool-btn" title="Code Snippet">&lt;/&gt;</button>
+                        </div>
+                        <button id="sendBtn" class="send-btn" title="Send Message">
+                            <span>Send</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Search / New Direct Chat Modal -->
+    <div id="newDirectChatModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Start a Direct Chat</span>
+                <button id="closeDirectChatModalBtn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="modalSearchInput">Search by name or username</label>
+                    <input type="text" id="modalSearchInput" class="form-input" placeholder="Type name (e.g. Alex, Rohit)..." autofocus>
+                </div>
+                <div id="modalSearchResults" class="modal-user-results">
+                    <!-- Populated dynamically with users -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDirectChatModalBtn" class="btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Connection & Profile Settings</span>
+                <button id="closeSettingsBtn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="settingServerUrl">Server Address (Host / URL)</label>
+                    <input type="text" id="settingServerUrl" class="form-input" placeholder="http://localhost:8080">
+                    <span class="form-hint">
+                        For cross-network team members, enter your public backend URL or tunnel (e.g. <code>https://your-tunnel.ngrok-free.app</code>).
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="settingDisplayName">Your Display Name</label>
+                    <input type="text" id="settingDisplayName" class="form-input" placeholder="e.g. Rohit Vaghasiya">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="settingUsername">Handle / Username</label>
+                    <input type="text" id="settingUsername" class="form-input" placeholder="e.g. rohit">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelSettingsBtn" class="btn-secondary">Cancel</button>
+                <button id="saveSettingsBtn" class="btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Channel Modal -->
+    <div id="newChannelModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Create a Channel</span>
+                <button id="closeNewChannelBtn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="newChannelName">Channel Name</label>
+                    <input type="text" id="newChannelName" class="form-input" placeholder="e.g. project-alpha">
+                    <span class="form-hint">Use letters, numbers, and dashes.</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="newChannelDesc">Description (optional)</label>
+                    <input type="text" id="newChannelDesc" class="form-input" placeholder="What is this channel about?">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelNewChannelBtn" class="btn-secondary">Cancel</button>
+                <button id="submitNewChannelBtn" class="btn-primary">Create Channel</button>
+            </div>
+        </div>
+    <!-- Switch User Modal -->
+    <div id="switchUserModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Log in as User (This Window)</span>
+                <button id="closeSwitchUserModalBtn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="switchDisplayName">Your Display Name</label>
+                    <input type="text" id="switchDisplayName" class="form-input" placeholder="e.g. Rohit Vaghasiya or Team Member">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="switchUsername">Username / ID</label>
+                    <input type="text" id="switchUsername" class="form-input" placeholder="e.g. rohit or team_member">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelSwitchUserModalBtn" class="btn-secondary">Cancel</button>
+                <button id="confirmSwitchUserBtn" class="btn-primary">Switch Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/websocket.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

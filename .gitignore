@@ -1,0 +1,36 @@
+# Compiled class files & Maven build output
+backend/target/
+target/
+*.class
+*.jar
+*.war
+
+# Large Binaries
+cloudflared.exe
+*.exe
+
+# Local Database files
+*.db
+*.mv.db
+*.trace.db
+
+# Chrome Extension private key and crx
+*.pem
+*.crx
+
+# IDE / Editor configuration
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Logs
+*.log
+logs/
+
+# Operating System files
+Thumbs.db
+Desktop.ini
+.DS_Store

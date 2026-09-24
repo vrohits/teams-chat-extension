@@ -1,0 +1,28 @@
+databases:
+  - name: teams-chat-postgres
+    databaseName: chatdb
+    user: postgres
+    plan: starter
+
+services:
+  - type: web
+    name: teams-chat-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: starter
+    envVars:
+      - key: DB_URL
+        fromDatabase:
+          name: teams-chat-postgres
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: teams-chat-postgres
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: teams-chat-postgres
+          property: password
+      - key: SPRING_PROFILES_ACTIVE
+        value: default

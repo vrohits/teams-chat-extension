@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Teams Chat Board",
+  "version": "1.0.0",
+  "description": "Collaborative real-time Teams-like Chat Board for cross-network team members",
+  "permissions": [
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Open Teams Chat Board"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
