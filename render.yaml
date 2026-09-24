@@ -2,7 +2,7 @@ databases:
   - name: teams-chat-postgres
     databaseName: chatdb
     user: postgres
-    plan: starter
+    plan: free
 
 services:
   - type: web
@@ -10,8 +10,20 @@ services:
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    plan: starter
+    plan: free
     envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: teams-chat-postgres
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: teams-chat-postgres
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: teams-chat-postgres
+          property: password
       - key: DB_URL
         fromDatabase:
           name: teams-chat-postgres
