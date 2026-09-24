@@ -2,7 +2,7 @@
  * Teams Chat Board - REST API Service & Configuration Storage
  */
 const ApiService = {
-    DEFAULT_SERVER_URL: 'http://localhost:8080',
+    DEFAULT_SERVER_URL: 'https://teams-chat-backend.onrender.com',
 
     async getServerUrl() {
         return new Promise((resolve) => {
